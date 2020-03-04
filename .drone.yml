@@ -1,0 +1,27 @@
+kind: pipeline
+type: kubernetes
+name: default
+
+steps:
+  - name: get tags
+    image: alpine/git
+    commands:
+      - git describe --abbrev=0 --tag | tr -d '\n' > .tags
+
+  - name: docker
+    image: banzaicloud/drone-kaniko
+    settings:
+      email: kedthunder@gmail.com
+      dockerfile: ./Dockerfile
+      registry: docker.pkg.github.com
+      repo: ked57/mspr-user-api-doc/documentation
+      username:
+        from_secret: github_username
+      password:
+        from_secret: github_token
+      tags:
+        - ${DRONE_COMMIT_SHA:0:8}
+        - latest
+trigger:
+  branch:
+  - master
