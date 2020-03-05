@@ -14,7 +14,7 @@ steps:
       email: kedthunder@gmail.com
       dockerfile: ./Dockerfile
       registry: docker.pkg.github.com
-      repo: ked57/mspr-user-api/documentation
+      repo: ked57/mspr-user-api-doc/documentation
       username:
         from_secret: github_username
       password:
