@@ -22,6 +22,15 @@ steps:
       tags:
         - ${DRONE_COMMIT_SHA:0:8}
         - latest
+  - name: deploy
+    image: pabloclsn/kubectl-docker:latest
+    commands:
+      - echo $KUBE_CONFIG > ~/.kube/config
+      - cat .kube/deployment.yaml | envsubst | kubectl apply -f -
+      - kubectl rollout restart deployment/mspr-user-api-doc-deployment -n prod-mspr-ci
+    environment:
+      KUBE_CONFIG:
+        from_secret: KUBE_CONFIG
 trigger:
   branch:
   - master
